@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html lang="zh-Hans">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>牍 — 改良尚书体 · Claude Code 插件</title>
+  <meta name="description" content="牍（du）者，改良尚书体之器也。古为密度之用——省 token 而人可读、模型不滑落。尚书之骨，金石之简。以尚书金文为骨，SessionStart hook 自动注入，一键即行。" />
+  <meta name="theme-color" content="#2b2620" />
+  <meta name="color-scheme" content="dark" />
+
+  <link rel="canonical" href="https://f2077.github.io/du/" />
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect x='8' y='8' width='84' height='84' rx='4' fill='%232b2620' stroke='%23b08642' stroke-width='4'/%3E%3Ctext x='50' y='58' text-anchor='middle' dominant-baseline='central' font-family='serif' font-size='60' fill='%23c9a86a'%3E%E7%89%8A%3C/text%3E%3C/svg%3E" />
+
+  <meta property="og:type" content="website" />
+  <meta property="og:title" content="牍 — 改良尚书体 · Claude Code 插件" />
+  <meta property="og:description" content="尚书之骨，金石之简。古为密度之用——以尚书金文为骨，Claude Code 改良尚书体之器。" />
+  <meta property="og:url" content="https://f2077.github.io/du/" />
+  <meta property="og:locale" content="zh_CN" />
+  <meta name="twitter:card" content="summary" />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@400;700;900&family=ZCOOL+XiaoWei&family=ZCOOL+QingKe+HuangYou&family=Cinzel:wght@400;700;900&family=Cormorant+Garamond:wght@500;700&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="style.css" />
+</head>
+
+<body>
+
+<!-- 青铜锈斑 SVG filter（定义一处，全页复用） -->
+<svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
+  <defs>
+    <filter id="patina" x="-5%" y="-5%" width="110%" height="110%">
+      <feTurbulence type="fractalNoise" baseFrequency="0.9" numOctaves="2" seed="11" result="noise"/>
+      <feColorMatrix in="noise" type="matrix"
+        values="0 0 0 0 0.24
+                0 0 0 0 0.42
+                0 0 0 0 0.35
+                0 0 0 0.6 0" result="greenNoise"/>
+      <feComposite in="greenNoise" in2="SourceGraphic" operator="in" result="masked"/>
+      <feBlend in="SourceGraphic" in2="masked" mode="screen"/>
+    </filter>
+    <!-- 朱砂印 -->
+    <symbol id="seal" viewBox="0 0 60 60">
+      <rect x="3" y="3" width="54" height="54" rx="2" fill="none" stroke="#8b2820" stroke-width="3"/>
+      <text x="30" y="34" text-anchor="middle" dominant-baseline="central"
+            font-family="serif" font-size="34" fill="#8b2820" font-weight="900">牍</text>
+    </symbol>
+  </defs>
+</svg>
+
+<!-- ════════════ 铭首（hero · 铸题） ════════════ -->
+<section class="hero bronze-surface" id="top">
+  <div class="hero-glow" aria-hidden="true"></div>
+
+  <div class="hero-inner">
+
+    <!-- 左：竖排铸题 -->
+    <div class="hero-left">
+      <div class="vline tagline-top">尚書之骨</div>
+      <h1 class="vline title-cast">牍</h1>
+      <div class="vline tagline-bot">金石之簡</div>
+      <div class="vline hero-note">改良尚書體 · Claude Code</div>
+    </div>
+
+    <!-- 右：横向铭板（du + 副题） -->
+    <div class="hero-right">
+      <div class="plaque plaque-hero">
+        <div class="plaque-en">du</div>
+        <div class="plaque-cn">改良尚書體之器</div>
+      </div>
+
+      <p class="hero-lead">
+        古為密度之用——省 <span class="mono">token</span> 而人可讀、模型不滑落。
+        以尚書金文為骨，砍戲仿腔、縮常用字、設狀態詞閉集。
+      </p>
+
+      <div class="hero-install">
+        <div class="install-label">置</div>
+        <pre class="install-code"><code>/plugin marketplace add https://github.com/F2077/du
+/plugin install du@du-marketplace</code></pre>
+      </div>
+
+      <div class="hero-sister">
+        姊妹插件 <a href="https://github.com/F2077/wen" rel="noopener">文（wen）</a>：
+        文者對話之古辭，主審美；牍者記事之古簡，主密度。一文一牍，一語一記，一散一密。
+      </div>
+    </div>
+
+  </div>
+
+  <!-- 朱砂印（极少量点缀） -->
+  <svg class="hero-seal" width="64" height="64" aria-hidden="true"><use href="#seal"/></svg>
+
+</section>
+
+
+<!-- ════════════ 骨（何為尚書之骨） ════════════ -->
+<section class="band bronze-surface" id="bone">
+  <div class="band-inner">
+    <div class="band-head">
+      <span class="band-zh">骨</span>
+      <span class="band-en">the bone</span>
+    </div>
+    <p class="band-lead">
+      牍以尚書之骨為根——四骨皆密度之源。
+    </p>
+
+    <div class="bone-grid">
+      <article class="bone-card bronze-frame">
+        <div class="bone-glyph">省主語</div>
+        <div class="bone-en">omit the subject</div>
+        <p class="bone-desc">主語可推則不書。最大密度源。</p>
+      </article>
+      <article class="bone-card bronze-frame">
+        <div class="bone-glyph">一事一記</div>
+        <div class="bone-en">one fact per clause</div>
+        <p class="bone-desc">不鋪陳、不論理，單句單事。</p>
+      </article>
+      <article class="bone-card bronze-frame">
+        <div class="bone-glyph">狀態前置</div>
+        <div class="bone-en">status front-loaded</div>
+        <p class="bone-desc">狀態詞閉集，掃讀即知進展。</p>
+      </article>
+      <article class="bone-card bronze-frame">
+        <div class="bone-glyph">助字分工</div>
+        <div class="bone-en">mood particles</div>
+        <p class="bone-desc">也斷、矣已成、耳限止、乎問、哉嘆。</p>
+      </article>
+    </div>
+  </div>
+</section>
+
+
+<!-- ════════════ 密（密度對照 · 古為密度之用） ════════════ -->
+<section class="band band-dark" id="density">
+  <div class="band-inner">
+    <div class="band-head">
+      <span class="band-zh">約</span>
+      <span class="band-en">the density</span>
+    </div>
+    <p class="band-lead">
+      同一意，白話與牍之別——古為密度之用，此其驗也。
+    </p>
+
+    <!-- 密度对照铭片 -->
+    <div class="density-pair">
+      <div class="density-side density-baihua">
+        <div class="density-label">白話</div>
+        <p class="density-text">
+          代碼已經拉下來了。依賴裝好了，沒有衝突。構建跑起來了，還在進行。單元測試通過了，四十三個全過。集成測試失敗了，超時，可能是數據庫連接池太小。正在查。部署沒開始，等審批。
+        </p>
+        <div class="density-stat"><span class="stat-num">~80</span><span class="stat-unit">字</span></div>
+      </div>
+
+      <div class="density-arrow" aria-hidden="true">鑄</div>
+
+      <div class="density-side density-du bronze-frame">
+        <div class="density-label">牍</div>
+        <p class="density-text density-cast">
+          拉碼畢。依賴裝，無虞。構建起，行中。單測盡過，計四十有三。集測敗，超時，疑連池隘。方察。部署待，候決。
+        </p>
+        <div class="density-stat"><span class="stat-num">~38</span><span class="stat-unit">字</span></div>
+      </div>
+    </div>
+
+    <!-- 真实金文密度点缀 -->
+    <div class="epigraph bronze-frame">
+      <div class="epigraph-text">折首五百，執訊五十。</div>
+      <div class="epigraph-src">——《虢季子白盤》，以八字記斬首五百、俘五十</div>
+    </div>
+  </div>
+</section>
+
+
+<!-- ════════════ 銘片陣（狀態詞閉集 · 豎排錯落） ════════════ -->
+<section class="band bronze-surface" id="states">
+  <div class="band-inner">
+    <div class="band-head">
+      <span class="band-zh">詞</span>
+      <span class="band-en">status closed set</span>
+    </div>
+    <p class="band-lead">
+      狀態詞閉集——十二字盡工作流之態。標準化、易遵循、易驗證。
+    </p>
+
+    <div class="strips">
+      <div class="strip bronze-frame"><span class="strip-zh">畢</span><span class="strip-en">done</span></div>
+      <div class="strip bronze-frame"><span class="strip-zh">行</span><span class="strip-en">running</span></div>
+      <div class="strip bronze-frame"><span class="strip-zh">待</span><span class="strip-en">waiting</span></div>
+      <div class="strip bronze-frame"><span class="strip-zh">敗</span><span class="strip-en">failed</span></div>
+      <div class="strip bronze-frame"><span class="strip-zh">疑</span><span class="strip-en">suspected</span></div>
+      <div class="strip bronze-frame"><span class="strip-zh">過</span><span class="strip-en">passed</span></div>
+      <div class="strip bronze-frame"><span class="strip-zh">始</span><span class="strip-en">started</span></div>
+      <div class="strip bronze-frame"><span class="strip-zh">續</span><span class="strip-en">continued</span></div>
+      <div class="strip bronze-frame"><span class="strip-zh">越</span><span class="strip-en">skipped</span></div>
+      <div class="strip bronze-frame"><span class="strip-zh">候</span><span class="strip-en">awaiting</span></div>
+      <div class="strip bronze-frame"><span class="strip-zh">察</span><span class="strip-en">investigating</span></div>
+      <div class="strip bronze-frame"><span class="strip-zh">決</span><span class="strip-en">approved</span></div>
+    </div>
+  </div>
+</section>
+
+
+<!-- ════════════ 銘（點睛 · 金石記功） ════════════ -->
+<section class="band band-dark" id="inscription">
+  <div class="band-inner">
+    <div class="band-head">
+      <span class="band-zh">銘</span>
+      <span class="band-en">the inscription</span>
+    </div>
+    <p class="band-lead">
+      遇真里程碑——大 feature 落成、大 bug 克復、大重構畢——牍可綴銘以記。
+      四言為體，勁峭簡古，至多兩句。不效文之吟詩作賦；銘主凝練，與牍之密同根，且金文銘辭本即牍之古源。閒常勿銘，疑則不銘。
+    </p>
+
+    <div class="ming-grid">
+      <div class="ming-card bronze-frame">
+        <div class="ming-zh">既克，乃安。</div>
+        <div class="ming-when">大 bug 克復</div>
+      </div>
+      <div class="ming-card bronze-frame">
+        <div class="ming-zh">器成，用行。</div>
+        <div class="ming-when">大 feature 落成</div>
+      </div>
+      <div class="ming-card bronze-frame">
+        <div class="ming-zh">更骨，疾行。</div>
+        <div class="ming-when">重構畢，性能升</div>
+      </div>
+      <div class="ming-card bronze-frame">
+        <div class="ming-zh">功成，名立。</div>
+        <div class="ming-when">長期項目竣工</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- ════════════ 防（防滑落 · 三道防） ════════════ -->
+<section class="band bronze-surface" id="guards">
+  <div class="band-inner">
+    <div class="band-head">
+      <span class="band-zh">防</span>
+      <span class="band-en">anti-slip guards</span>
+    </div>
+    <p class="band-lead">
+      條件省 + 三道防——密度隨場景自適應，無須切換檔位。
+    </p>
+
+    <div class="guard-list">
+      <div class="guard-item bronze-frame">
+        <div class="guard-num">一</div>
+        <div class="guard-body">
+          <div class="guard-title">硬條件</div>
+          <p class="guard-desc">省主語，唯前句同主、或主為當前之務乃可；不然，必出。</p>
+        </div>
+      </div>
+      <div class="guard-item bronze-frame">
+        <div class="guard-num">二</div>
+        <div class="guard-body">
+          <div class="guard-title">首句主出</div>
+          <p class="guard-desc">每段首句主語必出，後續承上省——給讀者一主語錨點。</p>
+        </div>
+      </div>
+      <div class="guard-item bronze-frame">
+        <div class="guard-num">三</div>
+        <div class="guard-body">
+          <div class="guard-title">歧義即補</div>
+          <p class="guard-desc">省後一句可作兩解者，寧補毋省。密度讓位於不歧。</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- ════════════ 葉腳（頁腳銘片） ════════════ -->
+<footer class="footer bronze-surface" id="footer">
+  <div class="footer-inner">
+    <div class="footer-plaque bronze-frame">
+      <div class="footer-zh">子子孫孫永寶用</div>
+      <div class="footer-src">——《毛公鼎》嘏辭</div>
+    </div>
+    <div class="footer-meta">
+      <div><a href="https://github.com/F2077/du" rel="noopener">GitHub · F2077/du</a></div>
+      <div>牍之令約 4,300 字符，折 <span class="mono">token</span> 約 1,100，每會話一注。</div>
+      <div>MIT · <a href="https://f2077.github.io/wen/" rel="noopener">姊妹 · 文</a></div>
+    </div>
+  </div>
+  <a href="#top" class="back-top" aria-label="返銘首">返首 ↑</a>
+</footer>
+
+<script src="script.js" defer></script>
+</body>
+</html>

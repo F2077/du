@@ -1,5 +1,5 @@
 {
-  "description": "牒 (die) reformed-尚书体 communication mode — injects die mode instructions as additionalContext on session start",
+  "description": "牍 (du) reformed-尚书体 communication mode — injects du mode instructions as additionalContext on session start",
   "hooks": {
     "SessionStart": [
       {
