@@ -1,0 +1,19 @@
+{
+  "$schema": "https://anthropic.com/claude-code/marketplace.schema.json",
+  "name": "die-marketplace",
+  "description": "牒 — 改良尚书体通信插件 marketplace",
+  "owner": {
+    "name": "die contributors"
+  },
+  "plugins": [
+    {
+      "name": "die",
+      "description": "牒 — reformed-尚书体 (Shangshu-style Classical Chinese) communication voice for Claude Code. Token-dense yet human-readable: 古为密度之用. 电报之古简,通信之密语. Auto-injects via SessionStart hook — install and go.",
+      "source": ".",
+      "category": "productivity",
+      "license": "MIT",
+      "keywords": ["classical-chinese", "shangshu", "density", "output-style", "communication", "token-saving"],
+      "homepage": "https://github.com/F2077/die"
+    }
+  ]
+}

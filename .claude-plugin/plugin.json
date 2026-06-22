@@ -1,0 +1,8 @@
+{
+  "name": "die",
+  "version": "0.1.0",
+  "description": "牒 — reformed-尚书体 (Shangshu-style Classical Chinese) communication voice for Claude Code. 古为密度之用: high token density, human-readable, model-stable. 电报之古简,通信之密语. Voice only, workflow untouched. Install and go.",
+  "author": {
+    "name": "die contributors"
+  }
+}
