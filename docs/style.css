@@ -1,0 +1,548 @@
+/* ════════════════════════════════════════════════════════════════
+   牍 — GitHub Page · 青铜铭石·牍文铸刻
+   对仗 wen（纸面雕版）：牍是青铜铸刻（锈色斑驳·凹凸铭文·铸边栏线）
+   ════════════════════════════════════════════════════════════════ */
+
+:root {
+  /* 传世青铜底色 */
+  --bronze-base:       #2b2620;
+  --bronze-mid:        #3d352b;
+  --bronze-dark:       #1a1714;
+  --bronze-deep:       #0e0c0a;
+
+  /* 新铸铜高光 */
+  --bronze-gold:       #b08642;
+  --bronze-highlight:  #d4a85a;
+
+  /* 孔雀石铜绿锈 */
+  --patina-green:      #3d6b5a;
+  --patina-bright:     #4a8a73;
+  --patina-deep:       #1f3d33;
+
+  /* 朱砂（极少量点缀） */
+  --cinnabar:          #8b2820;
+  --cinnabar-bright:   #a83828;
+
+  /* 铭文文字色 */
+  --text-cast:         #c9a86a;   /* 阳文铸字：铜本色金黄 */
+  --text-incised:      #0e0c0a;   /* 阴文凹字：深槽黑 */
+  --text-soft:         #a89172;   /* 次级铭文 */
+  --text-dim:          #6b5d48;   /* 最弱 */
+
+  /* 字体 */
+  --font-cn:          "Noto Serif SC", "Songti SC", "SimSun", "STSong", "Source Han Serif SC", serif;
+  --font-cn-display:  "ZCOOL XiaoWei", "Noto Serif SC", "STKaiti", "KaiTi", serif;
+  --font-cn-block:    "ZCOOL QingKe HuangYou", "Noto Serif SC", "STHeiti", sans-serif;
+  --font-en-display:  "Cinzel", "Cormorant Garamond", "Times New Roman", serif;
+  --font-en:          "Cormorant Garamond", "Times New Roman", Georgia, serif;
+  --font-mono:        "JetBrains Mono", "Cascadia Code", "Source Code Pro", Consolas, monospace;
+
+  --w-max: 1180px;
+}
+
+/* ── 重置 ── */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+body {
+  font-family: var(--font-cn);
+  color: var(--text-cast);
+  line-height: 1.75;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+  /* 全局：青铜深底 + 一道极淡斜向高光带，暗示整面青铜在光下 */
+  background:
+    linear-gradient(115deg,
+      transparent 40%,
+      rgba(176,134,66,0.04) 50%,
+      transparent 60%),
+    var(--bronze-deep);
+  background-attachment: fixed;
+  overflow-x: hidden;
+}
+
+a { color: var(--bronze-highlight); text-decoration: none; transition: color .25s; }
+a:hover { color: var(--patina-bright); }
+.mono { font-family: var(--font-mono); }
+
+/* ── 青铜面（锈色斑驳）── */
+.bronze-surface {
+  position: relative;
+  background:
+    /* 顶光斜射高光，暗示金属反光 */
+    linear-gradient(135deg,
+      rgba(212,168,90,0.16) 0%,
+      transparent 22%,
+      transparent 68%,
+      rgba(14,12,10,0.45) 100%),
+    /* 铜绿锈斑（radial 叠加，移动端 fallback 兼具） */
+    radial-gradient(circle at 12% 18%, rgba(61,107,90,0.55) 0%, transparent 9%),
+    radial-gradient(circle at 82% 28%, rgba(31,61,51,0.6) 0%, transparent 13%),
+    radial-gradient(circle at 48% 76%, rgba(74,138,115,0.4) 0%, transparent 7%),
+    radial-gradient(circle at 90% 88%, rgba(61,107,90,0.5) 0%, transparent 11%),
+    radial-gradient(circle at 25% 55%, rgba(31,61,51,0.35) 0%, transparent 8%),
+    /* 器身主色 */
+    radial-gradient(ellipse at 30% 20%,
+      var(--bronze-mid) 0%,
+      var(--bronze-base) 55%,
+      var(--bronze-dark) 100%);
+}
+
+/* 深色 band（暗器，更沉） */
+.band-dark {
+  background:
+    linear-gradient(135deg,
+      rgba(212,168,90,0.08) 0%,
+      transparent 25%,
+      transparent 70%,
+      rgba(0,0,0,0.5) 100%),
+    radial-gradient(circle at 70% 30%, rgba(61,107,90,0.3) 0%, transparent 14%),
+    radial-gradient(circle at 20% 70%, rgba(31,61,51,0.4) 0%, transparent 12%),
+    radial-gradient(ellipse at 50% 50%,
+      var(--bronze-dark) 0%, var(--bronze-deep) 100%);
+}
+
+/* ── 铸边铭框 ── */
+.bronze-frame {
+  border: 1.5px solid var(--bronze-gold);
+  border-radius: 3px;
+  box-shadow:
+    0 0 0 1px rgba(14,12,10,0.8),
+    inset 0 0 0 1px rgba(212,168,90,0.22),
+    inset 0 2px 10px rgba(14,12,10,0.55),
+    0 4px 18px rgba(0,0,0,0.45);
+  background:
+    linear-gradient(160deg,
+      rgba(61,53,43,0.6) 0%,
+      rgba(43,38,32,0.7) 50%,
+      rgba(26,23,20,0.8) 100%);
+  position: relative;
+}
+
+/* ── 阳文铸字（凸起，金文最经典）── */
+.cast-relief, .title-cast, .density-cast, .strip-zh, .ming-zh, .bone-glyph, .band-zh, .footer-zh, .epigraph-text, .plaque-cn {
+  color: var(--text-cast);
+  text-shadow:
+    0 1px 0 rgba(14,12,10,0.7),
+    0 2px 1px rgba(14,12,10,0.5),
+    0 -1px 0 rgba(212,168,90,0.4),
+    0 0 3px rgba(176,134,66,0.28);
+}
+
+/* ── 竖排 ── */
+.vline {
+  writing-mode: vertical-rl;
+  text-orientation: upright;
+  font-family: var(--font-cn-display);
+  letter-spacing: 0.15em;
+}
+
+/* ════════════ 铭首 hero ════════════ */
+.hero {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  padding: 4rem 2rem;
+  overflow: hidden;
+}
+.hero-glow {
+  position: absolute; inset: 0; pointer-events: none;
+  background: radial-gradient(ellipse 60% 50% at 28% 32%,
+    rgba(212,168,90,0.10) 0%, transparent 60%);
+}
+.hero-inner {
+  position: relative;
+  width: 100%; max-width: var(--w-max); margin: 0 auto;
+  display: grid;
+  grid-template-columns: 0.42fr 1fr;
+  gap: 3.5rem;
+  align-items: center;
+}
+/* 左：竖排铸题 */
+.hero-left {
+  display: flex; flex-direction: row-reverse; align-items: center;
+  gap: 1.2rem;
+  justify-content: center;
+}
+.tagline-top, .tagline-bot {
+  font-size: clamp(1.1rem, 2.2vw, 1.6rem);
+  color: var(--text-soft);
+  text-shadow: 0 1px 0 rgba(14,12,10,0.6);
+}
+.title-cast {
+  font-size: clamp(7rem, 16vw, 13rem);
+  font-weight: 900;
+  line-height: 1;
+  letter-spacing: 0;
+}
+.hero-note {
+  font-size: clamp(0.85rem, 1.4vw, 1.05rem);
+  color: var(--text-dim);
+  letter-spacing: 0.2em;
+}
+/* 右：横向铭板 + 引 + 安装 */
+.hero-right { display: flex; flex-direction: column; gap: 1.6rem; }
+.plaque {
+  display: inline-flex; flex-direction: column; align-items: flex-start;
+  padding: 1rem 1.8rem;
+}
+.plaque-hero { align-self: flex-start; }
+.plaque-en {
+  font-family: var(--font-en-display);
+  font-size: clamp(2.4rem, 5vw, 3.4rem);
+  font-weight: 900;
+  letter-spacing: 0.12em;
+  color: var(--bronze-highlight);
+  line-height: 1;
+  text-shadow: 0 2px 0 rgba(14,12,10,0.6), 0 -1px 0 rgba(212,168,90,0.3);
+}
+.plaque-cn {
+  font-family: var(--font-cn-display);
+  font-size: clamp(1rem, 2vw, 1.25rem);
+  margin-top: 0.4rem;
+  letter-spacing: 0.18em;
+}
+.hero-lead {
+  font-size: clamp(1rem, 1.8vw, 1.2rem);
+  color: var(--text-cast);
+  line-height: 1.9;
+  max-width: 38em;
+}
+.hero-lead .mono { color: var(--bronze-highlight); font-size: 0.92em; }
+.hero-install {
+  display: flex; align-items: stretch; gap: 0; max-width: 38em;
+  border-radius: 3px; overflow: hidden;
+  box-shadow: 0 4px 18px rgba(0,0,0,0.45);
+}
+.install-label {
+  display: flex; align-items: center; justify-content: center;
+  width: 2.6rem;
+  font-family: var(--font-cn-display); font-size: 1.3rem;
+  color: var(--bronze-highlight);
+  background: linear-gradient(180deg, var(--bronze-dark), var(--bronze-deep));
+  border: 1.5px solid var(--bronze-gold); border-right: none;
+  text-shadow: 0 -1px 0 rgba(212,168,90,0.3), 0 1px 0 rgba(0,0,0,0.6);
+}
+.install-code {
+  flex: 1;
+  font-family: var(--font-mono);
+  font-size: clamp(0.78rem, 1.5vw, 0.9rem);
+  color: var(--text-cast);
+  background: rgba(14,12,10,0.7);
+  border: 1.5px solid var(--bronze-gold);
+  padding: 0.9rem 1.1rem;
+  white-space: pre; overflow-x: auto;
+  line-height: 1.7;
+}
+.install-code code { font-family: inherit; }
+.hero-sister {
+  font-size: clamp(0.9rem, 1.5vw, 1rem);
+  color: var(--text-soft);
+  line-height: 1.85;
+  max-width: 38em;
+  padding-top: 0.4rem;
+  border-top: 1px solid rgba(176,134,66,0.25);
+}
+.hero-seal {
+  position: absolute;
+  bottom: 2.5rem; right: 3rem;
+  opacity: 0.78;
+  filter: drop-shadow(0 2px 4px rgba(0,0,0,0.5));
+}
+
+/* ════════════ band 通用 ════════════ */
+.band {
+  padding: 5.5rem 2rem;
+  border-top: 1px solid rgba(176,134,66,0.18);
+}
+.band-inner {
+  max-width: var(--w-max); margin: 0 auto;
+  display: flex; flex-direction: column; gap: 2.2rem;
+}
+.band-head {
+  display: flex; align-items: baseline; gap: 1.2rem;
+  padding-bottom: 1.2rem;
+  border-bottom: 1px solid rgba(176,134,66,0.3);
+}
+.band-zh {
+  font-family: var(--font-cn-display);
+  font-size: clamp(2.4rem, 5vw, 3.2rem);
+  font-weight: 900;
+  line-height: 1;
+}
+.band-en {
+  font-family: var(--font-en-display);
+  font-size: clamp(0.85rem, 1.4vw, 1.05rem);
+  letter-spacing: 0.25em;
+  text-transform: uppercase;
+  color: var(--text-dim);
+}
+.band-lead {
+  font-size: clamp(1rem, 1.7vw, 1.18rem);
+  color: var(--text-soft);
+  max-width: 40em;
+  line-height: 1.9;
+}
+
+/* ════════════ 骨 · bone-grid ════════════ */
+.bone-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 1.6rem;
+}
+.bone-card {
+  padding: 1.8rem 1.5rem;
+  display: flex; flex-direction: column; gap: 0.5rem;
+}
+.bone-glyph {
+  font-family: var(--font-cn-display);
+  font-size: clamp(1.5rem, 3vw, 1.9rem);
+  font-weight: 900;
+  letter-spacing: 0.08em;
+}
+.bone-en {
+  font-family: var(--font-en-display);
+  font-size: 0.8rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--text-dim);
+}
+.bone-desc {
+  font-size: 0.98rem;
+  color: var(--text-soft);
+  line-height: 1.8;
+  margin-top: 0.6rem;
+}
+
+/* ════════════ 密 · density-pair ════════════ */
+.density-pair {
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  gap: 1.5rem;
+  align-items: stretch;
+}
+.density-side {
+  padding: 1.8rem 1.6rem;
+  display: flex; flex-direction: column; gap: 1rem;
+}
+.density-baihua {
+  background: rgba(14,12,10,0.5);
+  border: 1.5px solid rgba(176,134,66,0.4);
+  border-radius: 3px;
+}
+.density-label {
+  font-family: var(--font-en-display);
+  font-size: 0.85rem; letter-spacing: 0.3em; text-transform: uppercase;
+  color: var(--text-dim);
+}
+.density-text {
+  font-size: 1.02rem; line-height: 1.95;
+  color: var(--text-soft);
+  flex: 1;
+}
+.density-cast {
+  font-family: var(--font-cn-display);
+  font-size: clamp(1.1rem, 2.2vw, 1.35rem);
+  color: var(--text-cast);
+  letter-spacing: 0.08em;
+  line-height: 2.1;
+}
+.density-stat { align-self: flex-end; display: flex; align-items: baseline; gap: 0.3rem; }
+.stat-num {
+  font-family: var(--font-en-display); font-weight: 900;
+  font-size: clamp(2rem, 4vw, 2.6rem);
+  color: var(--bronze-highlight);
+  text-shadow: 0 2px 0 rgba(14,12,10,0.6);
+}
+.stat-unit { font-size: 0.9rem; color: var(--text-dim); }
+.density-arrow {
+  align-self: center;
+  font-family: var(--font-cn-display); font-size: 2rem; font-weight: 900;
+  color: var(--bronze-gold);
+  text-shadow: 0 2px 0 rgba(14,12,10,0.6), 0 -1px 0 rgba(212,168,90,0.3);
+  animation: forge 3s ease-in-out infinite;
+}
+@keyframes forge {
+  0%, 100% { opacity: 0.7; transform: scale(1); }
+  50% { opacity: 1; transform: scale(1.08); }
+}
+.epigraph {
+  margin-top: 1.5rem;
+  padding: 1.4rem 2rem;
+  text-align: center;
+}
+.epigraph-text {
+  font-family: var(--font-cn-display);
+  font-size: clamp(1.3rem, 3vw, 1.8rem);
+  font-weight: 900;
+  letter-spacing: 0.15em;
+}
+.epigraph-src {
+  margin-top: 0.6rem;
+  font-size: 0.88rem;
+  color: var(--text-dim);
+  letter-spacing: 0.05em;
+}
+
+/* ════════════ 状态词 · strips（竖排错落铭片） ════════════ */
+.strips {
+  display: flex; flex-wrap: wrap; gap: 0.9rem;
+  justify-content: center;
+}
+.strip {
+  width: 96px;
+  min-height: 200px;
+  display: flex; flex-direction: column; align-items: center;
+  justify-content: space-between;
+  padding: 1.4rem 0.5rem 1rem;
+  writing-mode: vertical-rl;
+  text-orientation: upright;
+}
+.strip-zh {
+  font-family: var(--font-cn-display);
+  font-size: 2.4rem; font-weight: 900;
+  letter-spacing: 0;
+}
+.strip-en {
+  writing-mode: horizontal-tb;
+  text-orientation: mixed;
+  font-family: var(--font-en-display);
+  font-size: 0.68rem; letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--text-dim);
+  margin-top: auto;
+}
+/* 错落：仿简牍参差 */
+.strip:nth-child(3n)   { margin-top: 1.6rem; }
+.strip:nth-child(4n+1) { margin-top: 0.8rem; }
+.strip:nth-child(5n+3) { margin-top: 2.2rem; }
+
+/* ════════════ 铭 · ming-grid ════════════ */
+.ming-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 1.4rem;
+}
+.ming-card {
+  padding: 1.8rem 1.5rem;
+  display: flex; flex-direction: column; gap: 0.8rem;
+  text-align: center;
+}
+.ming-zh {
+  font-family: var(--font-cn-display);
+  font-size: clamp(1.4rem, 3vw, 1.8rem);
+  font-weight: 900;
+  letter-spacing: 0.12em;
+  line-height: 1.5;
+}
+.ming-when {
+  font-size: 0.85rem;
+  color: var(--text-dim);
+  letter-spacing: 0.05em;
+}
+
+/* ════════════ 防 · guard-list ════════════ */
+.guard-list { display: flex; flex-direction: column; gap: 1.2rem; }
+.guard-item {
+  display: flex; align-items: stretch; gap: 1.2rem;
+  padding: 1.3rem 1.5rem;
+}
+.guard-num {
+  flex: 0 0 auto;
+  display: flex; align-items: center; justify-content: center;
+  width: 3rem;
+  font-family: var(--font-cn-display); font-size: 1.8rem; font-weight: 900;
+  color: var(--bronze-highlight);
+  border-right: 1px solid rgba(176,134,66,0.35);
+  text-shadow: 0 2px 0 rgba(14,12,10,0.6);
+}
+.guard-body { display: flex; flex-direction: column; gap: 0.35rem; }
+.guard-title {
+  font-family: var(--font-cn-display);
+  font-size: 1.15rem; font-weight: 700;
+  color: var(--text-cast);
+  letter-spacing: 0.08em;
+}
+.guard-desc { font-size: 0.98rem; color: var(--text-soft); line-height: 1.8; }
+
+/* ════════════ 叶脚 footer ════════════ */
+.footer {
+  padding: 3.5rem 2rem 2.5rem;
+  border-top: 1px solid rgba(176,134,66,0.25);
+  position: relative;
+}
+.footer-inner {
+  max-width: var(--w-max); margin: 0 auto;
+  display: flex; flex-wrap: wrap; gap: 2rem;
+  align-items: center; justify-content: space-between;
+}
+.footer-plaque { padding: 1.2rem 1.8rem; text-align: center; }
+.footer-zh {
+  font-family: var(--font-cn-display);
+  font-size: clamp(1.2rem, 2.6vw, 1.6rem);
+  font-weight: 900; letter-spacing: 0.15em;
+}
+.footer-src { font-size: 0.8rem; color: var(--text-dim); margin-top: 0.4rem; }
+.footer-meta {
+  display: flex; flex-direction: column; gap: 0.4rem;
+  font-size: 0.9rem; color: var(--text-soft);
+  text-align: right;
+}
+.footer-meta .mono { color: var(--bronze-highlight); }
+.back-top {
+  display: inline-block; margin-top: 2rem;
+  font-family: var(--font-cn-display);
+  font-size: 0.95rem; color: var(--text-dim);
+  letter-spacing: 0.1em;
+}
+.back-top:hover { color: var(--bronze-highlight); }
+
+/* ════════════ 滚动揭示（渐进增强：默认可见，JS 加 .reveal-init 才隐藏） ════════════ */
+.reveal-init .reveal {
+  opacity: 0;
+  transform: translateY(24px);
+  transition: opacity .8s ease, transform .8s ease;
+}
+.reveal-init .reveal.is-in { opacity: 1; transform: none; }
+
+/* ════════════ 响应式 ════════════ */
+@media (max-width: 860px) {
+  .hero { min-height: auto; padding: 3.5rem 1.2rem; }
+  .hero-inner {
+    grid-template-columns: 1fr;
+    gap: 2.2rem;
+  }
+  .hero-left { flex-direction: row; justify-content: center; gap: 1rem; }
+  .tagline-top, .tagline-bot { font-size: 1rem; }
+  .title-cast { font-size: 6rem; }
+  .hero-note { display: none; }
+  .hero-seal { width: 48px; height: 48px; bottom: 1.5rem; right: 1.2rem; }
+
+  .band { padding: 3.8rem 1.2rem; }
+  .band-head { gap: 0.8rem; }
+
+  .density-pair {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+  .density-arrow { transform: rotate(90deg); margin: 0 auto; }
+
+  .footer-inner { flex-direction: column; text-align: center; }
+  .footer-meta { text-align: center; align-items: center; }
+}
+
+@media (max-width: 480px) {
+  .title-cast { font-size: 4.5rem; }
+  .strip { width: 78px; min-height: 160px; }
+  .strip-zh { font-size: 1.9rem; }
+  .install-label { width: 2.2rem; font-size: 1.1rem; }
+  .hero-install { flex-direction: column; }
+  .install-label { width: 100%; padding: 0.5rem; border-right: 1.5px solid var(--bronze-gold); border-bottom: none; }
+}
+
+/* ════════════ 降级：prefers-reduced-motion ════════════ */
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  .density-arrow { animation: none; }
+  .reveal-init .reveal { opacity: 1; transform: none; transition: none; }
+  * { animation-duration: 0.01ms !important; animation-iteration-count: 1 !important; }
+}
